@@ -436,6 +436,12 @@ void ImuFilterMadgwickRos::publishRawMsg(const rclcpp::Time &t,
 
 void ImuFilterMadgwickRos::reconfigCallback(const rcl_interfaces::msg::ParameterEvent::SharedPtr event)
 {
+  const std::string nodeFullName = std::string(get_namespace()) + std::string(get_name());
+  // if this parameter change is for this node, then continue
+  if (event->node != nodeFullName) {
+      return;
+  }
+
   double gain, zeta;
   std::lock_guard<std::mutex> lock(mutex_);
 
